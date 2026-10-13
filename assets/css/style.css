@@ -1,0 +1,904 @@
+/* ==========================================================================
+   Lily-Mei Fournier — portfolio
+   Feuille de styles unique.
+
+   Sommaire
+     1. Variables            — couleurs, typographie, mesures
+     2. Base
+     3. Enveloppe et chrome  — navigation, contact, signature
+     4. Page                 — grilles communes
+     5. Accueil              — galerie horizontale
+     6. Projets              — index tabulaire triable
+     7. Page projet
+     8. Info
+     9. Extras               — mosaïque à défilement continu
+    10. Contact
+    11. Responsive
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. VARIABLES
+   Tout se règle ici. Changer une valeur la propage à tout le site.
+   ========================================================================== */
+
+:root {
+
+  /* --- Couleurs ------------------------------------------------------- */
+  /* Blanc pur, choisi volontairement : beaucoup de plans ont un fond blanc,
+     et un fond gris les ferait apparaître comme des vignettes encadrées.
+     Le mockup prévoyait #f7f7f7 — le remettre ici suffit à revenir en arrière. */
+  --fond:          #ffffff;
+  --texte:         #1c1c1c;   /* presque noir, jamais noir pur */
+  --accent:        #173eeb;   /* actif, survol, lien, page courante */
+
+  /* Gris de repos, utilisé seulement pour les filets et les états faibles. */
+  --tenu:          rgba(28, 28, 28, 0.45);
+  --filet-pale:    rgba(28, 28, 28, 0.12);
+
+  /* Quatrième couleur présente sur la planche mais volontairement
+     inutilisée. Décommenter seulement si tu décides de t'en servir.
+     --accent-secondaire: #90cf36;                                        */
+
+  /* --- Typographie ---------------------------------------------------- */
+  /* Geist : grotesque géométrique, proche de la neutralité d'un SF Pro
+     sans être l'Inter que tout le monde utilise. Axe variable 300–600,
+     vraie italique. Pour en changer, remplacer ce nom ici ET le lien
+     Google Fonts en tête de chaque page HTML. */
+  --police: "Geist", ui-sans-serif, system-ui, -apple-system,
+            "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --t-menu:      24px;   /* navigation                        regular */
+  --t-titre:     20px;   /* titre de page / de section        medium  */
+  --t-index:     18px;   /* en-tête d'index, légende accueil  medium  */
+  --t-corps:     14px;   /* index, méta, données tabulaires   regular */
+  --t-prose:     15px;   /* paragraphes suivis                regular */
+  --t-legende:   10px;   /* légende sous image                light italic */
+
+  --poids-normal: 400;
+  --poids-medium: 500;
+
+  /* Interlignes. Le mockup est à ~1.2 : conservé pour les blocs courts.
+     Les paragraphes montent à 1.6, illisibles autrement en justifié. */
+  --interligne-serre: 1.2;
+  --interligne-menu:  34px;  /* pas exact du menu dans le mockup */
+  --interligne-corps: 1.6;
+  --interligne-rang:  2.4;   /* lignes de méta et de données */
+
+  /* --- Mesures ---------------------------------------------------------
+     Le mockup est dessiné sur 1920 px de large avec 36 px de marge.
+     Sur le web on plafonne la colonne de contenu : au-delà d'environ
+     1600 px, une ligne de texte devient trop longue et la page se vide
+     par le milieu. La marge, elle, respire avec la fenêtre.            */
+  --contenu-max:  1600px;
+  --marge:        clamp(20px, 3vw, 48px);
+  --gouttiere:    34px;   /* entre les deux colonnes */
+  --inset:        clamp(0px, 3vw, 56px);   /* retrait : extras et contact */
+  --haut-contenu: clamp(96px, 12vh, 140px);
+
+  /* Hauteur de la bande d'accueil : liée à la fenêtre plutôt que figée,
+     pour qu'elle tienne à l'écran sur un portable comme sur un 27 pouces. */
+  --bande-hauteur: min(52vh, 560px);
+
+  --rang-index:    45px;  /* pas vertical de l'index projets */
+
+  /* --- Mouvement ------------------------------------------------------- */
+  --transition: 420ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  --transition-courte: 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --filet: 1px solid var(--texte);
+}
+
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--fond);
+  color: var(--texte);
+  font-family: var(--police);
+  font-size: var(--t-corps);
+  font-weight: var(--poids-normal);
+  line-height: var(--interligne-corps);
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: rgba(0, 0, 0, 0.04);   /* réserve visuelle pendant le chargement */
+}
+
+a { color: inherit; text-decoration: none; }
+
+a:focus-visible,
+button:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+h1, h2, h3, p, figure, ul, ol, dl, dd { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+
+button {
+  font: inherit; color: inherit;
+  background: none; border: 0; padding: 0;
+  cursor: pointer;
+}
+
+/* Accessible mais invisible. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap;
+}
+
+
+/* ==========================================================================
+   3. ENVELOPPE ET CHROME
+   La navigation fait partie du flux : elle défile avec la page.
+   Aucun bandeau opaque ne passe donc jamais par-dessus les images.
+   ========================================================================== */
+
+.enveloppe {
+  max-width: var(--contenu-max);
+  margin-inline: auto;
+  padding-inline: var(--marge);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chrome__nav { padding-top: 32px; }
+.chrome__nav li { line-height: var(--interligne-menu); }
+
+.chrome__nav a,
+.chrome__bas a {
+  font-size: var(--t-menu);
+  font-weight: var(--poids-normal);
+  line-height: var(--interligne-menu);
+  transition: color var(--transition-courte);
+}
+
+.chrome__nav a:hover,
+.chrome__bas a:hover,
+.chrome__nav a[aria-current="page"],
+.chrome__bas a[aria-current="page"] { color: var(--accent); }
+
+/* Doublon de « contact » réservé au mobile (voir app.js). */
+.chrome__mobile { display: none; }
+
+/* Pied : contact à gauche, signature à droite, sur la même ligne de base.
+   « margin-top: auto » le colle en bas de fenêtre quand la page est courte,
+   exactement comme sur le mockup, sans rien figer. */
+.chrome__pied {
+  margin-top: auto;
+  padding: 60px 0 32px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.chrome__signature {
+  font-size: var(--t-legende);
+  font-weight: var(--poids-medium);
+  line-height: 1.4;
+  color: var(--accent);
+  padding-bottom: 4px;
+}
+
+
+/* ==========================================================================
+   4. PAGE
+   ========================================================================== */
+
+.page { padding-top: var(--haut-contenu); }
+
+/* Pages dont le contenu est en retrait supplémentaire (info, extras). */
+.page--inset { padding-inline: var(--inset); }
+
+/* Grille à deux colonnes : visuel à gauche, texte à droite.
+   Le visuel prend nettement plus de place que le texte. */
+.duo {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: var(--gouttiere);
+  align-items: start;
+}
+
+/* Titre de section souligné d'un filet, motif récurrent du mockup. */
+.filet-titre,
+.titre-bloc {
+  font-size: var(--t-titre);
+  font-weight: var(--poids-medium);
+  line-height: var(--interligne-serre);
+  padding-bottom: 6px;
+  border-bottom: var(--filet);
+}
+
+.titre-bloc h1 { font: inherit; }
+
+/* Sous-titre facultatif, sous le titre du projet et au-dessus du filet. */
+.sous-titre {
+  font-size: var(--t-corps);
+  font-weight: var(--poids-medium);
+  line-height: var(--interligne-serre);
+  margin-top: 6px;
+  color: var(--tenu);
+}
+
+.legende {
+  font-size: var(--t-legende);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1.4;
+  text-align: right;
+  margin-top: 6px;
+}
+
+/* Paragraphes suivis : mesure courte, justification et césures. */
+.prose {
+  font-size: var(--t-prose);
+  text-align: justify;
+  hyphens: auto;
+}
+.prose p + p { margin-top: 1.4em; }
+
+
+/* ==========================================================================
+   5. ACCUEIL — galerie horizontale
+   ========================================================================== */
+
+.galerie {
+  display: flex;
+  height: var(--bande-hauteur);
+  width: 100%;
+}
+
+.galerie__item {
+  flex: 1 1 0;                          /* au repos : parts égales */
+  min-width: 0;
+  position: relative;
+  display: block;
+  transition: flex-basis var(--transition), flex-grow var(--transition);
+  container-type: inline-size;          /* pilote l'affichage de la légende */
+}
+
+/* L'image visée s'étend jusqu'au carré : sa largeur devient égale à la
+   hauteur de la bande. Les autres gardent « flex: 1 1 0 » et se partagent
+   à parts égales ce qui reste.
+   Le sélecteur descend de .galerie:hover pour l'emporter sur la règle de
+   repos, question de spécificité.
+   « :focus-within » ouvre le même comportement au clavier — sans lui, la
+   galerie serait inutilisable sans souris. */
+.galerie:hover .galerie__item:hover,
+.galerie .galerie__item:focus-within {
+  flex: 0 0 min(var(--bande-hauteur), 55%);
+}
+
+.galerie__image {
+  width: 100%;
+  height: var(--bande-hauteur);
+  object-fit: cover;
+}
+
+.galerie__legende {
+  font-size: var(--t-index);
+  font-weight: var(--poids-normal);
+  line-height: var(--interligne-serre);
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity var(--transition-courte), color var(--transition-courte);
+}
+
+/* La légende n'apparaît que si la vignette est assez large pour la porter —
+   exactement le seuil observé dans le mockup. */
+@container (min-width: 200px) {
+  .galerie__legende { opacity: 1; }
+}
+
+.galerie__item:hover .galerie__legende,
+.galerie__item:focus-within .galerie__legende { color: var(--accent); }
+
+.galerie__annee { display: block; }
+
+
+/* ==========================================================================
+   6. PROJETS — index tabulaire triable
+   ========================================================================== */
+
+.index { width: 100%; }
+
+.index__ligne {
+  display: grid;
+  grid-template-columns: 144fr 540fr 288fr 540fr 336fr;
+  align-items: baseline;
+}
+
+.index__entete {
+  font-size: var(--t-index);
+  font-weight: var(--poids-medium);
+  line-height: var(--interligne-serre);
+  padding-bottom: 10px;
+  border-bottom: var(--filet);
+}
+
+/* En-têtes cliquables : No. et Année. Les autres restent du texte. */
+.index__tri {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  transition: color var(--transition-courte);
+}
+.index__tri:hover { color: var(--accent); }
+.index__tri[data-actif="true"] { color: var(--accent); }
+
+/* Flèche d'ordre : discrète au survol, franche sur la colonne active. */
+.index__fleche {
+  font-size: 9px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity var(--transition-courte), transform var(--transition-courte);
+}
+.index__tri:hover .index__fleche      { opacity: 0.4; }
+.index__tri[data-actif="true"] .index__fleche { opacity: 1; }
+.index__tri[data-sens="asc"] .index__fleche   { transform: rotate(180deg); }
+
+a.index__ligne {
+  min-height: var(--rang-index);
+  align-content: center;
+  transition: color var(--transition-courte);
+}
+
+a.index__ligne:hover { color: var(--accent); }
+
+.index__corps a.index__ligne > span { padding: 6px 12px 6px 0; }
+
+
+/* ==========================================================================
+   7. PAGE PROJET
+   ========================================================================== */
+
+/* Grille de douze colonnes. Chaque image y déclare sa largeur et sa
+   position (voir « taille » et « position » dans les données), ce qui
+   donne un rythme libre plutôt qu'un alignement de vignettes.
+   L'écart vertical est large : c'est lui qui fait respirer la séquence. */
+.projet__visuels {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: 26px;
+  row-gap: 90px;
+  align-items: start;
+}
+
+.projet__visuels figure { grid-column: span 12; min-width: 0; }
+
+/* Garde-fou : ces images sont montrées en entier, jamais recadrées.
+   Si une proportion erronée se glissait dans les données, l'image serait
+   au pire cadrée dans le vide, jamais écrasée. */
+.projet__visuels img { object-fit: contain; width: 100%; }
+
+/* L'image est un bouton, mais ne doit rien en montrer. */
+.zoom {
+  display: block;
+  width: 100%;
+  cursor: zoom-in;
+}
+
+/* Boucle vidéo silencieuse, remplaçant un GIF. */
+.video-boucle { display: block; width: 100%; }
+
+/* Vidéo : rien n'est chargé de YouTube tant qu'on n'a pas cliqué. Au repos
+   ce n'est qu'une image avec un bouton de lecture dessiné en CSS. */
+.video__declencheur {
+  display: block;
+  position: relative;
+  width: 100%;
+  cursor: pointer;
+}
+
+.video__bouton {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 64px; height: 64px;
+  margin: -32px 0 0 -32px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--fond) 88%, transparent);
+  transition: background var(--transition-courte);
+}
+
+/* Triangle de lecture, dessiné sans image. */
+.video__bouton::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 54%;
+  width: 0; height: 0;
+  margin: -10px 0 0 -6px;
+  border-style: solid;
+  border-width: 10px 0 10px 16px;
+  border-color: transparent transparent transparent var(--texte);
+}
+
+.video__declencheur:hover .video__bouton { background: var(--fond); }
+.video__declencheur:hover .video__bouton::after { border-left-color: var(--accent); }
+
+.video__cadre {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+/* Une seule grille pour toutes les lignes de méta : c'est la seule façon
+   de garantir que « Cap-Diamant » et « Supervisé par… » tombent sur la
+   même verticale. Deux grilles séparées avec un nombre de colonnes
+   différent décalent les gouttières et désalignent les colonnes. */
+.projet__meta {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 340fr)             /* assez large pour un nom de cours */
+    minmax(min-content, 340fr)   /* le lieu doit tenir sur une seule ligne */
+    minmax(min-content, 140fr);  /* la date est courte */
+  gap: 0 12px;
+  margin-top: 20px;
+  line-height: var(--interligne-rang);
+}
+
+.projet__meta > .principale { font-weight: var(--poids-medium); }
+
+/* Valeur longue (superviseur, collaborateurs) : occupe le reste de la ligne. */
+.projet__meta > .large { grid-column: 2 / -1; }
+
+/* La contribution personnelle est une phrase, pas une étiquette : elle
+   doit pouvoir courir sur plusieurs lignes sans l'interligne aéré des
+   lignes de méta. */
+.projet__meta > .phrase {
+  grid-column: 2 / -1;
+  line-height: var(--interligne-corps);
+  padding: 8px 0;
+}
+
+.projet__texte { max-width: 380px; margin-top: 34px; }
+
+.projet__concept { font-weight: var(--poids-medium); }
+
+.projet__retour {
+  display: inline-block;
+  margin-top: 48px;
+  transition: color var(--transition-courte);
+}
+.projet__retour:hover { color: var(--accent); }
+
+/* Ligne cliquable pour télécharger un fichier joint (un PDF, par ex.) */
+.telechargement {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 34px;
+  padding: 14px 0;
+  border-top: var(--filet);
+  border-bottom: var(--filet);
+  transition: color var(--transition-courte);
+}
+.telechargement:hover { color: var(--accent); }
+
+.telechargement__label::after {
+  content: "↓";
+  display: inline-block;
+  margin-left: 8px;
+  transition: transform var(--transition-courte);
+}
+.telechargement:hover .telechargement__label::after { transform: translateY(2px); }
+
+.telechargement__taille { color: var(--tenu); font-size: var(--t-legende); white-space: nowrap; }
+
+
+/* ==========================================================================
+   8. INFO
+   ========================================================================== */
+
+/* La page Info renverse la proportion du gabarit projet : ici la colonne
+   de droite porte cinq colonnes de données, pas du texte suivi. Elle a
+   donc besoin de plus de place que la photo, et d'aucun retrait latéral —
+   c'est ce retrait qui provoquait les retours à la ligne. */
+.page--info .duo { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); }
+
+.info__portrait { max-width: 388px; }
+
+.info__bio { max-width: 388px; margin-top: 30px; }
+
+.info__section + .info__section { margin-top: 56px; }
+
+.info__lignes { margin-top: 14px; line-height: var(--interligne-rang); }
+
+.info__ligne { display: grid; gap: 0 12px; }
+
+/* Formation et Expérience partagent exactement la même grille : c'est ce
+   qui fait tomber les dates sous les dates et les lieux sous les lieux
+   d'une section à l'autre. Expérience laisse simplement sa première
+   cellule vide, là où Formation porte le type de diplôme.
+
+   « minmax(min-content, …) » plutôt que « minmax(0, …) » : sans ce
+   plancher, une cellule en nowrap déborde sur sa voisine et l'on obtient
+   « 2016-2021Gaspé, Québec ». */
+.info__ligne--formation {
+  grid-template-columns:
+    minmax(min-content, 100fr)   /* type de formation (vide en expérience) */
+    minmax(min-content, 230fr)   /* institution / employeur */
+    minmax(min-content, 220fr)   /* domaine / type d'emploi */
+    minmax(min-content, 100fr)   /* date */
+    minmax(min-content, 150fr);  /* lieu */
+}
+
+.info__ligne--logiciels {
+  grid-template-columns:
+    minmax(min-content, 144fr) minmax(min-content, 216fr)
+    minmax(min-content, 146fr) minmax(0, 418fr);
+}
+
+.info__ligne--distinctions {
+  grid-template-columns: minmax(0, 576fr) minmax(min-content, 348fr);
+}
+
+/* Dates et niveaux sont courts : les couper en deux lignes
+   (« 2016- » / « 2021 ») serait une faute. */
+.info__ligne--formation    > span:nth-child(4),
+.info__ligne--formation    > span:nth-child(5),
+.info__ligne--logiciels    > span:nth-child(2),
+.info__ligne--logiciels    > span:nth-child(4),
+.info__ligne--distinctions > span:nth-child(2) { white-space: nowrap; }
+
+
+/* ==========================================================================
+   9. EXTRAS — mosaïque à défilement continu
+   Les colonnes sont construites en JavaScript plutôt qu'avec « columns »
+   CSS : une colonne CSS se rééquilibre à chaque ajout, ce qui ferait
+   sauter toute la mosaïque à chaque chargement de vignettes.
+   ========================================================================== */
+
+.extras__intro {
+  font-size: var(--t-index);
+  font-weight: var(--poids-normal);
+  line-height: var(--interligne-serre);
+  margin-bottom: 100px;
+}
+
+.mosaique { display: grid; gap: 24px; align-items: start; }
+
+.mosaique__col { display: grid; gap: 16px; align-content: start; }
+
+.mosaique__item { display: block; position: relative; }
+
+.mosaique__cadre { display: block; position: relative; overflow: hidden; }
+
+.mosaique__image { width: 100%; height: 100%; object-fit: cover; }
+
+/* Voile clair + titre centré au survol. */
+.mosaique__voile {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  text-align: center;
+  font-size: var(--t-index);
+  line-height: var(--interligne-serre);
+  color: var(--texte);
+  background: color-mix(in srgb, var(--fond) 82%, transparent);
+  opacity: 0;
+  transition: opacity var(--transition-courte);
+}
+
+.mosaique__item:hover .mosaique__voile,
+.mosaique__item:focus-visible .mosaique__voile { opacity: 1; }
+
+/* Repère de fin de lot : déclenche le chargement du lot suivant. */
+.mosaique__sentinelle { height: 1px; }
+
+.mosaique__fin {
+  margin-top: 60px;
+  text-align: center;
+  color: var(--tenu);
+}
+
+
+/* ==========================================================================
+   8b. APPARITION
+   Le contenu se pose en fondu au lieu d'apparaître d'un coup — voir
+   reveler() dans app.js. L'effet est entièrement piloté par l'API Web
+   Animations et du style en ligne, sans aucune règle ici : une transition
+   CSS déclenchée par une classe se réglerait par la propriété raccourcie
+   « transition », qu'une règle plus spécifique portant sur le même
+   élément (couleur au survol, agrandissement au survol...) pourrait
+   écraser entièrement — c'est exactement ce qui rendait l'index des
+   projets silencieux. L'état masqué n'est posé qu'en JavaScript : si le
+   script ne s'exécute pas, tout reste simplement visible.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   8c. CURSEUR
+   Remplace la flèche système par un point de la couleur d'accent — voir
+   curseurPersonnalise() dans app.js.
+
+   Deux éléments imbriqués, pour deux raisons de bouger différentes :
+     .curseur        se déplace au pixel près, sans transition — un curseur
+                      qui traîne derrière la souris se sentirait cassé.
+     .curseur__point grossit avec une transition douce au survol d'un
+                      élément cliquable — c'est le seul mouvement qui doit
+                      être adouci.
+   Mélanger les deux dans une seule transition aurait fait « rattraper »
+   la position à chaque déplacement, au lieu de suivre la souris pile.
+
+   Seulement sur les appareils à pointeur précis (une vraie souris) : au
+   doigt, rien ne remplace le doigt. Si le script ne s'exécute pas, la
+   classe qui masque le curseur système n'est jamais posée — la flèche
+   normale reste affichée, aucun risque de souris invisible.
+   ========================================================================== */
+
+html.curseur-actif,
+html.curseur-actif a,
+html.curseur-actif button { cursor: none; }
+
+.curseur {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.curseur--visible { opacity: 1; }
+
+.curseur__point {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.curseur--survol .curseur__point { transform: scale(1.8); }
+
+
+/* ==========================================================================
+   9a. VISIONNEUSE
+   Fond de la couleur du site plutôt qu'un voile noir : l'agrandissement
+   doit se lire comme la même page, pas comme une galerie photo.
+   ========================================================================== */
+
+.loupe {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  place-items: center;
+  padding: 56px;
+  background: color-mix(in srgb, var(--fond) 97%, transparent);
+}
+
+.loupe[data-ouvert] { display: grid; }
+
+.loupe__scene {
+  display: grid;
+  place-items: center;
+  gap: 10px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.loupe__scene img {
+  max-width: min(1600px, 92vw);
+  max-height: 84vh;
+  width: auto;
+  object-fit: contain;
+  cursor: zoom-out;
+}
+
+.loupe__legende { text-align: center; }
+.loupe__legende[hidden] { display: none; }
+
+.loupe__fermer,
+.loupe__prec,
+.loupe__suiv {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  line-height: 1;
+  color: var(--texte);
+  transition: color var(--transition-courte);
+}
+
+.loupe__fermer:hover,
+.loupe__prec:hover,
+.loupe__suiv:hover { color: var(--accent); }
+
+.loupe__fermer { top: 16px; right: 16px; font-size: 17px; }
+.loupe__prec   { left: 12px;  top: 50%; margin-top: -22px; font-size: 34px; }
+.loupe__suiv   { right: 12px; top: 50%; margin-top: -22px; font-size: 34px; }
+
+.loupe__prec[hidden], .loupe__suiv[hidden] { display: none; }
+
+
+/* ==========================================================================
+   9b. RETOUR EN HAUT
+   Flèche discrète en bas à droite, alignée sur le bord de la colonne de
+   contenu et non sur le bord de la fenêtre. Elle n'apparaît qu'une fois
+   la page défilée, et s'efface à l'approche du pied pour ne jamais
+   chevaucher la signature.
+   ========================================================================== */
+
+.haut {
+  position: fixed;
+  bottom: 32px;
+  right: max(var(--marge), calc((100vw - var(--contenu-max)) / 2 + var(--marge)));
+  z-index: 20;
+
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
+  line-height: 1;
+  color: var(--texte);
+  background: var(--fond);
+
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity var(--transition-courte),
+              transform var(--transition-courte),
+              visibility var(--transition-courte),
+              color var(--transition-courte);
+}
+
+.haut[data-visible="true"] {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+}
+
+.haut:hover { color: var(--accent); }
+
+
+/* ==========================================================================
+   10. CONTACT
+   ========================================================================== */
+
+.contact__intro { max-width: 420px; margin-bottom: 40px; }
+
+.contact__liste { line-height: var(--interligne-rang); }
+
+.contact__ligne { display: grid; grid-template-columns: 144fr 780fr; gap: 0 12px; }
+
+.contact__ligne a { transition: color var(--transition-courte); }
+.contact__ligne a:hover { color: var(--accent); }
+
+
+/* ==========================================================================
+   11. RESPONSIVE
+   ========================================================================== */
+
+/* --- Tablette ------------------------------------------------------------ */
+@media (max-width: 1024px) {
+  /* « .page--info .duo » doit être répété ici : sa spécificité dépasse
+     celle de « .duo » seul, et l'emporterait même dans cette requête. */
+  .duo,
+  .page--info .duo { grid-template-columns: 1fr; gap: 56px; }
+
+  .projet__texte, .info__bio, .info__portrait, .contact__intro { max-width: 560px; }
+
+  /* L'index perd la colonne « Cadre », la moins essentielle sur petit écran. */
+  .index__ligne { grid-template-columns: 90fr 460fr 160fr 300fr; }
+  .index__ligne > .index__cadre { display: none; }
+}
+
+/* --- Mobile -------------------------------------------------------------- */
+@media (max-width: 700px) {
+  :root {
+    --haut-contenu: 60px;
+    --t-menu: 20px;
+    --interligne-menu: 30px;
+  }
+
+  /* Navigation en ligne, sans menu déroulant : cinq liens tiennent. */
+  .chrome__nav { padding-top: 20px; }
+  .chrome__nav ul { display: flex; flex-wrap: wrap; gap: 0 20px; }
+  .chrome__mobile { display: block; }
+
+  .chrome__pied { padding-top: 40px; }
+  .chrome__bas { display: none; }
+
+  /* Galerie : pile verticale tactile, chaque projet assez grand pour être visé. */
+  .galerie { display: block; height: auto; }
+  .galerie__item { flex: none; margin-bottom: 30px; }
+  .galerie .galerie__item:focus-within,
+  .galerie:hover .galerie__item:hover { flex: none; }
+  .galerie__image { height: auto; aspect-ratio: 3 / 2; }
+  .galerie__legende { opacity: 1; }
+
+  /* Index : deux colonnes, le reste passe en dessous. */
+  .index__entete { display: none; }
+  .index__ligne { grid-template-columns: 60px 1fr; row-gap: 2px; }
+  a.index__ligne {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--filet-pale);
+    align-content: start;
+  }
+  .index__corps a.index__ligne > span { padding: 0; }
+  .index__ligne > .index__cadre { display: block; grid-column: 2; opacity: 0.62; }
+  .index__ligne > .index__annee,
+  .index__ligne > .index__lieu { grid-column: 2; opacity: 0.62; }
+
+  /* Sur un écran étroit, le rythme de largeurs n'a plus de sens : chaque
+     image reprend toute la colonne. Le « !important » est nécessaire, la
+     position venant d'un style en ligne. */
+  .projet__visuels { row-gap: 44px; }
+  .projet__visuels figure {
+    grid-column: 1 / -1 !important;
+    margin-top: 0 !important;
+  }
+
+  .loupe { padding: 20px; }
+  .loupe__prec { left: 0; }
+  .loupe__suiv { right: 0; }
+
+  .projet__meta { grid-template-columns: 1fr; line-height: 1.9; }
+  .projet__meta > .large { grid-column: 1; }
+
+  .info__ligne--formation,
+  .info__ligne--logiciels,
+  .info__ligne--distinctions { grid-template-columns: 1fr 1fr; line-height: 1.9; }
+
+  .mosaique { gap: 16px; }
+  .extras__intro { margin-bottom: 48px; }
+
+  /* Pas de survol au doigt : le titre reste lisible en permanence. */
+  .mosaique__voile {
+    position: static; opacity: 1; background: none;
+    padding: 8px 0 0; text-align: left; font-size: var(--t-corps);
+  }
+
+  .contact__ligne { grid-template-columns: 1fr; }
+  .contact__ligne dt { color: var(--tenu); }
+}
+
+/* --- Appareils sans survol : neutralise l'agrandissement ----------------- */
+@media (hover: none) {
+  .galerie:hover .galerie__item:hover { flex: 1 1 0; }
+}
+
+/* --- Mouvement réduit ---------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 1ms !important;
+    animation-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* --- Impression ---------------------------------------------------------- */
+@media print {
+  .chrome__nav, .chrome__pied { display: none; }
+  .page { padding: 0; }
+}

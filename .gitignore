@@ -1,0 +1,33 @@
+# ==========================================================================
+# Fichiers gardés en local mais jamais publiés.
+#
+# Les images ci-dessous sont les originaux pleine résolution conservés après
+# conversion en WebP / MP4 : le site ne les utilise pas. Ils restent sur ton
+# ordinateur, mais ne partent pas sur GitHub (certains dépassent la limite de
+# 100 Mo par fichier, et ils alourdiraient inutilement le dépôt).
+#
+# Si tu veux un jour publier l'un d'eux, retire simplement sa ligne.
+# ==========================================================================
+
+# Outils de développement
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Originaux non utilisés par le site
+images/info/portrait.jpg
+images/projets/empreinte-de-la-ville/01.png
+images/projets/empreinte-de-la-ville/02.png
+images/projets/empreinte-de-la-ville/03.gif
+images/projets/empreinte-de-la-ville/04.gif
+images/projets/exploration-du-bois/01.jpg
+images/projets/exploration-du-bois/02.jpg
+images/projets/exploration-du-bois/03.jpg
+images/projets/exploration-du-bois/04.jpg
+images/projets/exploration-du-bois/05.jpg
+images/projets/gemaux/01.jpg
+images/projets/gemaux/02.jpg
+images/projets/gemaux/03.jpg
+images/projets/la-poesie-de-l-ordinaire/la-poesie-de-l-ordinaire-original.pdf
