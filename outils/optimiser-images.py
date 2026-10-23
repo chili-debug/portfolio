@@ -84,7 +84,11 @@ def main():
     for p in fichiers:
         ko = p.stat().st_size / 1024
         img = Image.open(p).convert("RGB")
-        trop_large = img.width > a.largeur
+        # On borne le COTE LE PLUS LONG : une image en portrait bornee
+        # seulement en largeur garderait toute sa hauteur (2560 px pour une
+        # photo verticale de Gemaux, 1,8 Mo au lieu de quelques centaines).
+        cote = max(img.width, img.height)
+        trop_large = cote > a.largeur
 
         if ko < SEUIL_KO and not trop_large:
             avant += ko
@@ -92,8 +96,8 @@ def main():
             continue
 
         if trop_large:
-            h = round(img.height * a.largeur / img.width)
-            img = img.resize((a.largeur, h), Image.LANCZOS)
+            f = a.largeur / cote
+            img = img.resize((round(img.width * f), round(img.height * f)), Image.LANCZOS)
 
         data, mode = meilleure_version(img)
         neuf = len(data) / 1024

@@ -38,7 +38,7 @@ const PROJECTS = [
     annee: "2024",
     court: "A24",
     cadre: "Atelier I",
-    lieu: "",
+    lieu: "Quelque part",
     type: "Petite construction",
     sousTitre: "La capsule",
     date: "Automne 2024",
@@ -49,7 +49,12 @@ const PROJECTS = [
     contribution: "",
     cover: "images/projets/ouverture/cover.webp",
     coverW: 2000, coverH: 1328,
-    images: []
+    images: [
+      { src: "images/projets/ouverture/02.webp", legende: "Maquette", w: 2000, h: 1535, taille: "grande", position: "centre" },
+      { src: "images/projets/ouverture/01.webp", legende: "Détail", w: 2000, h: 1328, taille: "petite", position: "gauche" },
+      { src: "images/projets/ouverture/03.webp", legende: "Intérieur", w: 2000, h: 1328, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/ouverture/04.webp", legende: "Vue par l’ouverture", w: 2000, h: 1328, taille: "moyenne", position: "centre" }
+    ]
   },
 
   {
@@ -111,8 +116,14 @@ const PROJECTS = [
     description: "",
     contribution: "",
     cover: "images/projets/evanescent/cover.webp",
-    coverW: 2000, coverH: 2667,
-    images: []
+    coverW: 1500, coverH: 2000,
+    images: [
+      { src: "images/projets/evanescent/02.webp", legende: "Séjour", w: 1440, h: 959, taille: "pleine" },
+      { src: "images/projets/evanescent/01.webp", legende: "Cuisine", w: 1080, h: 1440, taille: "petite", position: "gauche" },
+      { src: "images/projets/evanescent/03.webp", legende: "Salon en double hauteur", w: 1080, h: 1440, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/evanescent/04.webp", legende: "Chambre", w: 720, h: 960, taille: "mini", position: "gauche" },
+      { src: "images/projets/evanescent/05.webp", legende: "Terrasse", w: 1440, h: 1080, taille: "moyenne", position: "droite", decalage: 60 }
+    ]
   },
 
   {
@@ -225,9 +236,22 @@ Des bancs intégrés circulaires sont ajoutés autour des poteaux et des bancs t
     cover: "images/projets/gemaux/cover.webp",
 
     coverW: 2000, coverH: 1332,
-    /* Les trois images d'exemple (aplats gris) ont été retirées avant la
-       mise en ligne. Ajoute ici les vraies, sur le modèle des autres projets. */
-    images: []
+    images: [
+      { src: "images/projets/gemaux/02.webp", legende: "Rue intérieure", w: 2000, h: 1331, taille: "pleine" },
+      { src: "images/projets/gemaux/05.webp", legende: "Café au rez-de-chaussée", w: 2000, h: 1333, taille: "grande", position: "centre" },
+      { src: "images/projets/gemaux/01.webp", legende: "Vue vers le ciel depuis la rue intérieure", w: 1333, h: 2000, taille: "petite", position: "gauche" },
+      { src: "images/projets/gemaux/03.webp", legende: "Café, intérieur", w: 2000, h: 1331, taille: "petite", position: "droite", decalage: 120 },
+      { src: "images/projets/gemaux/04.webp", legende: "Atelier", w: 2000, h: 1325, taille: "moyenne", position: "gauche" },
+      { src: "images/projets/gemaux/06.webp", legende: "Cuisine", w: 2000, h: 1331, taille: "petite", position: "gauche" },
+      { src: "images/projets/gemaux/07.webp", legende: "Salle à manger", w: 2000, h: 1331, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/gemaux/08.webp", legende: "Salon", w: 2000, h: 1331, taille: "petite", position: "gauche" },
+      { src: "images/projets/gemaux/09.webp", legende: "Salon", w: 2000, h: 1331, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/gemaux/10.webp", legende: "Séjour sous les combles", w: 2000, h: 1331, taille: "pleine" },
+      { src: "images/projets/gemaux/11.webp", legende: "Chambre", w: 2000, h: 1331, taille: "moyenne", position: "droite" },
+      { src: "images/projets/gemaux/12.webp", legende: "Coin cuisine", w: 1257, h: 1257, taille: "mini", position: "gauche", decalage: 60 },
+      { src: "images/projets/gemaux/13.webp", legende: "Studio", w: 2000, h: 1333, taille: "petite", position: "gauche" },
+      { src: "images/projets/gemaux/14.webp", legende: "Studio", w: 1439, h: 959, taille: "petite", position: "droite", decalage: 90 }
+    ]
   },
 
   {
@@ -280,7 +304,12 @@ Par son réaménagement, elle contribue à révéler et à mettre en valeur le n
     contribution: "",
     cover: "images/projets/confluence/cover.webp",
     coverW: 2000, coverH: 1333,
-    images: []
+    images: [
+      { src: "images/projets/confluence/04.webp", legende: "Le nouveau volume", w: 2000, h: 1542, taille: "pleine" },
+      { src: "images/projets/confluence/01.webp", legende: "Bâtiment patrimonial réaménagé", w: 2000, h: 1346, taille: "petite", position: "gauche" },
+      { src: "images/projets/confluence/03.webp", legende: "Bibliothèque", w: 2000, h: 1346, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/confluence/05.webp", legende: "La place publique en hiver", w: 1152, h: 896, taille: "moyenne", position: "centre" }
+    ]
   },
 
   {
@@ -454,7 +483,15 @@ En harmonie avec la nature, l’architecture propose une expérience immersive q
     contribution: "",
     cover: "images/projets/murmures/cover.webp",
     coverW: 1529, coverH: 1029,
-    images: []
+    images: [
+      { src: "images/projets/murmures/rendu-2-1.webp", legende: "Parcours couvert", w: 1529, h: 1029, taille: "pleine" },
+      { src: "images/projets/murmures/axonometrie.webp", legende: "Axonométrie éclatée", w: 2400, h: 1680, taille: "grande", position: "centre" },
+      { src: "images/projets/murmures/plan-rdc.webp", legende: "Plan du rez-de-chaussée", w: 2400, h: 1816, taille: "pleine" },
+      { src: "images/projets/murmures/plan-etage.webp", legende: "Plan de l’étage", w: 2400, h: 1816, taille: "pleine" },
+      { src: "images/projets/murmures/rendu-3.webp", legende: "Façade sur la forêt", w: 1529, h: 1029, taille: "petite", position: "gauche" },
+      { src: "images/projets/murmures/rendu-4.webp", legende: "Atelier", w: 1536, h: 1024, taille: "petite", position: "droite", decalage: 90 },
+      { src: "images/projets/murmures/rendu-2.webp", legende: "Espace méditatif", w: 1535, h: 1024, taille: "grande", position: "centre" }
+    ]
   }
 
 ];

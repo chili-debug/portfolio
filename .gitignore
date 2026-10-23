@@ -1,12 +1,16 @@
 # ==========================================================================
-# Fichiers gardés en local mais jamais publiés.
+# Fichiers gardés sur ton ordinateur mais jamais publiés sur GitHub.
 #
-# Les images ci-dessous sont les originaux pleine résolution conservés après
-# conversion en WebP / MP4 : le site ne les utilise pas. Ils restent sur ton
-# ordinateur, mais ne partent pas sur GitHub (certains dépassent la limite de
-# 100 Mo par fichier, et ils alourdiraient inutilement le dépôt).
+# Dans les dossiers de projets, le site n'utilise que des .webp, .mp4 et
+# .pdf. Tout le reste (JPG, PNG, GIF, fichiers Illustrator) est un
+# original de travail : tu peux en déposer autant que tu veux, il ne partira
+# jamais en ligne. Lance  python outils/optimiser-images.py  pour en tirer
+# la version web.
 #
-# Si tu veux un jour publier l'un d'eux, retire simplement sa ligne.
+# Ces règles portent sur le TYPE de fichier, pas sur des noms précis : une
+# ancienne liste de noms avait fait disparaître de GitHub tes vraies photos
+# de Gémaux, parce qu'elles portaient les mêmes noms que d'anciennes
+# images d'exemple.
 # ==========================================================================
 
 # Outils de développement
@@ -16,18 +20,15 @@ __pycache__/
 Thumbs.db
 desktop.ini
 
-# Originaux non utilisés par le site
-images/info/portrait.jpg
-images/projets/empreinte-de-la-ville/01.png
-images/projets/empreinte-de-la-ville/02.png
-images/projets/empreinte-de-la-ville/03.gif
-images/projets/empreinte-de-la-ville/04.gif
-images/projets/exploration-du-bois/01.jpg
-images/projets/exploration-du-bois/02.jpg
-images/projets/exploration-du-bois/03.jpg
-images/projets/exploration-du-bois/04.jpg
-images/projets/exploration-du-bois/05.jpg
-images/projets/gemaux/01.jpg
-images/projets/gemaux/02.jpg
-images/projets/gemaux/03.jpg
-images/projets/la-poesie-de-l-ordinaire/la-poesie-de-l-ordinaire-original.pdf
+# Originaux de travail, dans les projets et la page Info
+images/projets/**/*.jpg
+images/projets/**/*.jpeg
+images/projets/**/*.JPG
+images/projets/**/*.png
+images/projets/**/*.PNG
+images/projets/**/*.gif
+images/projets/**/*.ai
+images/projets/**/*.psd
+images/projets/**/*-original.pdf
+images/info/*.jpg
+images/info/*.png
